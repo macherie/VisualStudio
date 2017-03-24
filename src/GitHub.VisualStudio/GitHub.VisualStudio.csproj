@@ -95,6 +95,10 @@
     <DeployExtension>True</DeployExtension>
     <IncludeDebugSymbolsInVSIXContainer>true</IncludeDebugSymbolsInVSIXContainer>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(BuildingInsideVisualStudio)' != 'true'">
+    <!-- Only deploy extension when building inside Visual Studio -->
+    <DeployExtension>false</DeployExtension>
+  </PropertyGroup>
   <PropertyGroup Condition="$(Buildtype) == 'Internal'">
     <AssemblyOriginatorKeyFile>..\..\script\Key.snk</AssemblyOriginatorKeyFile>
     <SignAssembly>true</SignAssembly>
@@ -301,6 +305,7 @@
       <Link>Properties\SolutionInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyResolverPackage.cs" />
+    <Compile Include="GitCloneCommandLinePackage.cs" />
     <Compile Include="Helpers\VisualTreeExtensions.cs" />
     <Compile Include="IServiceProviderPackage.cs" />
     <Compile Include="Menus\BlameLink.cs" />
