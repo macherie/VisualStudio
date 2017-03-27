@@ -2,6 +2,8 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 14
 VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.26228.4
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHub.VisualStudio", "src\GitHub.VisualStudio\GitHub.VisualStudio.csproj", "{11569514-5AE5-4B5B-92A2-F10B0967DE5F}"
 EndProject
@@ -107,6 +109,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "GitHubVSAutomationIDs", "GitHubVSAutomationIDs", "{4405C20E-A72A-4807-9480-14E9BB558347}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GithubVSTestAutomationIDs", "submodules\GitHubVSAutomationIDs\GithubVSAutomationIDs\GithubVSTestAutomationIDs.csproj", "{665078F4-5875-431D-A2CC-421849B43328}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GitHub.Exports.UnitTests", "test\GitHub.Exports.UnitTests\GitHub.Exports.UnitTests.csproj", "{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -562,6 +566,22 @@ Global
 		{665078F4-5875-431D-A2CC-421849B43328}.XamlDesign|Any CPU.Build.0 = Release|Any CPU
 		{665078F4-5875-431D-A2CC-421849B43328}.XamlDesign|x86.ActiveCfg = Release|Any CPU
 		{665078F4-5875-431D-A2CC-421849B43328}.XamlDesign|x86.Build.0 = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Debug|x86.Build.0 = Debug|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Publish|Any CPU.ActiveCfg = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Publish|Any CPU.Build.0 = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Publish|x86.ActiveCfg = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Publish|x86.Build.0 = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Release|x86.ActiveCfg = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.Release|x86.Build.0 = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.XamlDesign|Any CPU.ActiveCfg = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.XamlDesign|Any CPU.Build.0 = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.XamlDesign|x86.ActiveCfg = Release|Any CPU
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4}.XamlDesign|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -587,5 +607,6 @@ Global
 		{7B835A7D-CF94-45E8-B191-96F5A4FE26A8} = {8A7DA2E7-262B-4581-807A-1C45CE79CDFD}
 		{4405C20E-A72A-4807-9480-14E9BB558347} = {1E7F7253-A6AF-43C4-A955-37BEDDA01AB8}
 		{665078F4-5875-431D-A2CC-421849B43328} = {4405C20E-A72A-4807-9480-14E9BB558347}
+		{E31AECD3-84D5-4A7C-BF33-D3BCD5A656C4} = {8A7DA2E7-262B-4581-807A-1C45CE79CDFD}
 	EndGlobalSection
 EndGlobal
