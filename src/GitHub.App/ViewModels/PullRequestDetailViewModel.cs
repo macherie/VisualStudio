@@ -12,7 +12,6 @@ using GitHub.Exports;
 using GitHub.Extensions;
 using GitHub.Models;
 using GitHub.Services;
-using GitHub.Settings;
 using GitHub.UI;
 using LibGit2Sharp;
 using NullGuard;
@@ -26,7 +25,7 @@ namespace GitHub.ViewModels
     [ExportViewModel(ViewType = UIViewType.PRDetail)]
     [PartCreationPolicy(CreationPolicy.NonShared)]
     [NullGuard(ValidationFlags.None)]
-    public class PullRequestDetailViewModel : BaseViewModel, IPullRequestDetailViewModel
+    public class PullRequestDetailViewModel : PanePageViewModelBase, IPullRequestDetailViewModel
     {
         readonly ILocalRepositoryModel repository;
         readonly IModelService modelService;
@@ -36,9 +35,13 @@ namespace GitHub.ViewModels
         string sourceBranchDisplayName;
         string targetBranchDisplayName;
         string body;
+        IReadOnlyList<IPullRequestChangeNode> changedFilesTree;
         IPullRequestCheckoutState checkoutState;
         IPullRequestUpdateState updateState;
         string operationError;
+        bool isBusy;
+        bool isLoading;
+        bool isCheckedOut;
         bool isFromFork;
         bool isInCheckout;
 
@@ -103,7 +106,7 @@ namespace GitHub.ViewModels
             SubscribeOperationError(Push);
 
             OpenOnGitHub = ReactiveCommand.Create();
-            OpenFile = ReactiveCommand.Create();
+            OpenFile = ReactiveCommand.Create(this.WhenAnyValue(x => x.IsCheckedOut));
             DiffFile = ReactiveCommand.Create();
         }
 
@@ -143,6 +146,32 @@ namespace GitHub.ViewModels
         {
             get { return targetBranchDisplayName; }
             private set { this.RaiseAndSetIfChanged(ref targetBranchDisplayName, value); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the view model is updating.
+        /// </summary>
+        public bool IsBusy
+        {
+            get { return isBusy; }
+            private set { this.RaiseAndSetIfChanged(ref isBusy, value); }
+        }
+
+        /// Gets a value indicating whether the pull request branch is checked out.
+        /// </summary>
+        public bool IsCheckedOut
+        {
+            get { return isCheckedOut; }
+            private set { this.RaiseAndSetIfChanged(ref isCheckedOut, value); }
+        }
+
+        /// <summary>
+        /// Gets a value indicating whether the view model is loading.
+        /// </summary>
+        public bool IsLoading
+        {
+            get { return isLoading; }
+            private set { this.RaiseAndSetIfChanged(ref isLoading, value); }
         }
 
         /// <summary>
@@ -194,7 +223,11 @@ namespace GitHub.ViewModels
         /// <summary>
         /// Gets the changed files as a tree.
         /// </summary>
-        public IReactiveList<IPullRequestChangeNode> ChangedFilesTree { get; } = new ReactiveList<IPullRequestChangeNode>();
+        public IReadOnlyList<IPullRequestChangeNode> ChangedFilesTree
+        {
+            get { return changedFilesTree; }
+            private set { this.RaiseAndSetIfChanged(ref changedFilesTree, value); }
+        }
 
         /// <summary>
         /// Gets a command that checks out the pull request locally.
@@ -234,7 +267,10 @@ namespace GitHub.ViewModels
         {
             var prNumber = data?.Data != null ? (int)data.Data : Model.Number;
 
-            IsBusy = true;
+            if (Model == null)
+                IsLoading = true;
+            else
+                IsBusy = true;
 
             OperationError = null;
             modelService.GetPullRequest(repository, prNumber)
@@ -258,20 +294,14 @@ namespace GitHub.ViewModels
             TargetBranchDisplayName = GetBranchDisplayName(IsFromFork, pullRequest.Base.Label);
             Body = !string.IsNullOrWhiteSpace(pullRequest.Body) ? pullRequest.Body : Resources.NoDescriptionProvidedMarkdown;
 
-            ChangedFilesTree.Clear();
-
-            var treeChanges = await pullRequestsService.GetTreeChanges(repository, pullRequest);
-
-            // WPF doesn't support AddRange here so iterate through the changes.
-            foreach (var change in CreateChangedFilesTree(pullRequest, treeChanges).Children)
-            {
-                ChangedFilesTree.Add(change);
-            }
+            var changes = await pullRequestsService.GetTreeChanges(repository, pullRequest);
+            ChangedFilesTree = CreateChangedFilesTree(pullRequest, changes).Children.ToList();
 
             var localBranches = await pullRequestsService.GetLocalBranches(repository, pullRequest).ToList();
-            var isCheckedOut = localBranches.Contains(repository.CurrentBranch);
 
-            if (isCheckedOut)
+            IsCheckedOut = localBranches.Contains(repository.CurrentBranch);
+
+            if (IsCheckedOut)
             {
                 var divergence = await pullRequestsService.CalculateHistoryDivergence(repository, Model.Number);
                 var pullEnabled = divergence.BehindBy > 0;
@@ -331,23 +361,12 @@ namespace GitHub.ViewModels
                 UpdateState = null;
             }
 
-            IsBusy = false;
+            IsLoading = IsBusy = false;
 
             if (!isInCheckout)
             {
                 pullRequestsService.RemoveUnusedRemotes(repository).Subscribe(_ => { });
             }
-        }
-
-        /// <summary>
-        /// Gets the specified file as it appears in the pull request.
-        /// </summary>
-        /// <param name="file">The file or directory node.</param>
-        /// <returns>The path to the extracted file.</returns>
-        public Task<string> ExtractFile(IPullRequestFileNode file)
-        {
-            var path = Path.Combine(file.DirectoryPath, file.FileName);
-            return pullRequestsService.ExtractFile(repository, modelService, model.Head.Sha, path, file.Sha).ToTask();
         }
 
         /// <summary>
@@ -358,7 +377,17 @@ namespace GitHub.ViewModels
         public Task<Tuple<string, string>> ExtractDiffFiles(IPullRequestFileNode file)
         {
             var path = Path.Combine(file.DirectoryPath, file.FileName);
-            return pullRequestsService.ExtractDiffFiles(repository, modelService, model, path, file.Sha).ToTask();
+            return pullRequestsService.ExtractDiffFiles(repository, modelService, model, path, file.Sha, IsCheckedOut).ToTask();
+        }
+
+        /// <summary>
+        /// Gets the full path to a file in the working directory.
+        /// </summary>
+        /// <param name="file">The file.</param>
+        /// <returns>The full path to the file in the working directory.</returns>
+        public string GetLocalFilePath(IPullRequestFileNode file)
+        {
+            return Path.Combine(repository.LocalPath, file.DirectoryPath, file.FileName);
         }
 
         void SubscribeOperationError(ReactiveCommand<Unit> command)
