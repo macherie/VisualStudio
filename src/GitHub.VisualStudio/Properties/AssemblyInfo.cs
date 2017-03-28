@@ -15,13 +15,10 @@ using Microsoft.VisualStudio.Shell;
     OldVersionLowerBound = "0.0.0.0", OldVersionUpperBound = AssemblyVersionInformation.Version)]
 [assembly: ProvideBindingRedirection(AssemblyName = "GitHub.Extensions", CodeBase = @"$PackageFolder$\GitHub.Extensions.dll",
     OldVersionLowerBound = "0.0.0.0", OldVersionUpperBound = AssemblyVersionInformation.Version)]
-[assembly: ProvideBindingRedirection(AssemblyName = "Octokit", CodeBase = @"$PackageFolder$\Octokit.dll",
-    OldVersionLowerBound = "LowestMajor", OldVersionUpperBound = "Current")]
-[assembly: ProvideBindingRedirection(AssemblyName = "LibGit2Sharp", CodeBase = @"$PackageFolder$\LibGit2Sharp.dll",
-    OldVersionLowerBound = "LowestMajor", OldVersionUpperBound = "Current")]
-[assembly: ProvideBindingRedirection(AssemblyName = "Splat", CodeBase = @"$PackageFolder$\Splat.dll",
-    OldVersionLowerBound = "LowestMajor", OldVersionUpperBound = "Current")]
-[assembly: ProvideBindingRedirection(AssemblyName = "Rothko", CodeBase = @"$PackageFolder$\Rothko.dll",
-    OldVersionLowerBound = "LowestMajor", OldVersionUpperBound = "Current")]
 [assembly: ProvideBindingRedirection(AssemblyName = "GitHub.VisualStudio.TestAutomation.AutomationIDs", CodeBase = @"$PackageFolder$\GitHub.VisualStudio.TestAutomation.AutomationIDs.dll",
     OldVersionLowerBound = "LowestMajor", OldVersionUpperBound = "Current")]
+
+[assembly: ProvideCodeBase(AssemblyName = "Octokit", CodeBase = @"$PackageFolder$\Octokit.dll")]
+[assembly: ProvideCodeBase(AssemblyName = "LibGit2Sharp", CodeBase = @"$PackageFolder$\LibGit2Sharp.dll")]
+[assembly: ProvideCodeBase(AssemblyName = "Splat", CodeBase = @"$PackageFolder$\Splat.dll")]
+[assembly: ProvideCodeBase(AssemblyName = "Rothko", CodeBase = @"$PackageFolder$\Rothko.dll")]
