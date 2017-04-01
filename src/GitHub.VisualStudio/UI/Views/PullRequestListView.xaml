@@ -26,7 +26,7 @@
     </Binding>
   </d:DesignProperties.DataContext>
 
-  <UserControl.Resources>
+  <Control.Resources>
     <ResourceDictionary>
       <ResourceDictionary.MergedDictionaries>
         <cache:SharedDictionaryManager Source="pack://application:,,,/GitHub.VisualStudio.UI;component/SharedDictionary.xaml" />
@@ -103,7 +103,7 @@
       </CollectionViewSource>
         
    </ResourceDictionary>
-  </UserControl.Resources>
+  </Control.Resources>
 
   <DockPanel Margin="6,6,6,0">
 
@@ -115,15 +115,13 @@
 
       <WrapPanel Grid.Column="0" HorizontalAlignment="Stretch">
 
-        <ui:LinkDropDown IsEnabled="{Binding IsLoaded}"
-                         ItemsSource="{Binding States}"
+        <ui:LinkDropDown ItemsSource="{Binding States}"
                          SelectedItem="{Binding SelectedState}"
                          AutomationProperties.AutomationId="{x:Static automation:AutomationIDs.PullRequestListStatusFilterComboBox}" />
 
         <Separator Style="{StaticResource VerticalSeparator}" />
 
         <ui:LinkDropDown Header="Assignee"
-                         IsEnabled="{Binding IsLoaded}"
                          ItemsSource="{Binding Source={StaticResource AssigneeCollectionViewSource}}"
                          SelectedItem="{Binding SelectedAssignee}"
                          AutomationProperties.AutomationId="{x:Static automation:AutomationIDs.PullRequestListAssigneeFilterComboBox}"/>
@@ -131,7 +129,6 @@
         <Separator Style="{StaticResource VerticalSeparator}" />
 
         <ui:LinkDropDown Header="Author"
-                         IsEnabled="{Binding IsLoaded}"
                          ItemsSource="{Binding Source={StaticResource AuthorCollectionViewSource}}"
                          SelectedItem="{Binding SelectedAuthor}"
                          AutomationProperties.AutomationId="{x:Static automation:AutomationIDs.PullRequestListAuthorFilterComboBox}" />          
