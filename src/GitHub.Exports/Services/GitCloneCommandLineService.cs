@@ -12,6 +12,8 @@ namespace GitHub.Services
     [Export(typeof(IGitCloneCommandLineService))]
     public class GitCloneCommandLineService : IGitCloneCommandLineService
     {
+        public const string GitCloneSwitch = "GitClone";
+
         IVsAppCommandLine vsAppCommandLine;
         IVSGitServices vsGitServices;
         IVSServices vsServices;
